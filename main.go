@@ -1,5 +1,12 @@
 package main
 
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strings"
+)
+
 type Game struct {
 	World    [][]int
 	Player   Player
@@ -40,5 +47,13 @@ func main() {
 		World:   worldMap,
 		Player:  Player{X: 2, Y: 2},
 		PowerOn: true,
+	}
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Println("")
+		fmt.Println(">")
+		input, _ := reader.ReadString('\n')
+		cleanInput := strings.TrimSpace(input)
+		fmt.Printf("You entered the command :%s\n", cleanInput)
 	}
 }
