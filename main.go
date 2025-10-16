@@ -45,17 +45,60 @@ func main() {
 	game := Game{
 		GameMode: ModeRoom,
 	}
+	crashSite := Room{
+		Name:        "The Crash Site",
+		Description: "Empty for now.",
+		Exits:       make(map[string]*Exit),
+	}
+	baseExterior := Room{
+		Name:        "The Base's Exterior",
+		Description: "Empty for now.",
+		Exits:       make(map[string]*Exit),
+	}
+	solarArray := Room{
+		Name:        "The Solar Array",
+		Description: "Still empty.",
+		Items:       make(map[string]*Item),
+		Exits:       make(map[string]*Exit),
+	}
+	solarArray.Items["battery"] = &Item{
+		Name:        "Battery",
+		Description: "A battery. Can server to power electrical devices for a short time.",
+	}
+	crashSite.Exits["east"] = &Exit{
+		Description: "Empty for noww",
+		Destination: &baseExterior,
+	}
+	baseExterior.Exits["south"] = &Exit{
+		Description: "Emptyyy",
+		Destination: &solarArray,
+	}
+	baseExterior.Exits["west"] = &Exit{
+		Description: "Empty",
+		Destination: &crashSite,
+	}
+	solarArray.Exits["north"] = &Exit{
+		Description: "Emptyed",
+		Destination: &baseExterior,
+	}
+	player := Player{
+		CurrentRoom: &crashSite,
+		Inventory:   make(map[string]*Item),
+	}
 	for {
 		fmt.Println("")
-		fmt.Println(">")
+		fmt.Print(">")
 		input, _ := reader.ReadString('\n')
 		cleanInput := strings.TrimSpace(input)
 		fmt.Printf("You entered the command :%s\n", cleanInput)
 		switch game.GameMode {
 		case ModeRoom:
 			//stuff for when outside
+			fmt.Println("Room!")
+
 		case ModeGrid:
 			//stuff for when no light and when inside in general
+
 		}
 	}
 }

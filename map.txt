@@ -1,0 +1,5 @@
+<crash site> ----> <base exterior>
+                        |
+                        |
+                        v
+                    <solar array>
