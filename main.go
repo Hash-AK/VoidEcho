@@ -90,11 +90,24 @@ func main() {
 		fmt.Print(">")
 		input, _ := reader.ReadString('\n')
 		cleanInput := strings.TrimSpace(input)
+		fieldsCommand := strings.Fields(cleanInput)
+		command := fieldsCommand[0]
 		fmt.Printf("You entered the command :%s\n", cleanInput)
 		switch game.GameMode {
 		case ModeRoom:
 			//stuff for when outside
-			fmt.Println("Room!")
+			switch command {
+			case "go":
+				// stuff
+			case "look":
+				//stuff
+			case "take":
+				//stuff
+			case "use":
+				//stuff
+			default:
+				fmt.Println("Unknown command in room mode.")
+			}
 
 		case ModeGrid:
 			//stuff for when no light and when inside in general
