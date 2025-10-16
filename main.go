@@ -85,6 +85,8 @@ func main() {
 		CurrentRoom: &crashSite,
 		Inventory:   make(map[string]*Item),
 	}
+	var arg1 string
+	var arg2 string
 	for {
 		fmt.Println("")
 		fmt.Print(">")
@@ -92,7 +94,12 @@ func main() {
 		cleanInput := strings.TrimSpace(input)
 		fieldsCommand := strings.Fields(cleanInput)
 		command := fieldsCommand[0]
-		arg1 := fieldsCommand[1]
+		if len(fieldsCommand) > 1 {
+			arg1 = fieldsCommand[1]
+		}
+		if len(fieldsCommand) > 2 {
+			arg2 = fieldsCommand[2]
+		}
 		fmt.Printf("You entered the command :%s\n", cleanInput)
 		switch game.GameMode {
 		case ModeRoom:
@@ -109,6 +116,8 @@ func main() {
 					fmt.Println("")
 					player.CurrentRoom = exit.Destination
 					fmt.Println(player.CurrentRoom.Description)
+				} else {
+					fmt.Println("You cannot go this way!")
 				}
 			case "look":
 				//stuff
@@ -118,11 +127,17 @@ func main() {
 				//stuff
 			default:
 				fmt.Println("Unknown command in room mode.")
+
 			}
 
 		case ModeGrid:
 			//stuff for when no light and when inside in general
-
+			switch command {
+			case "go":
+				direction := arg1
+				distance := arg2
+				fmt.Println(direction, distance)
+			}
 		}
 	}
 }
