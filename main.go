@@ -92,6 +92,7 @@ func main() {
 		cleanInput := strings.TrimSpace(input)
 		fieldsCommand := strings.Fields(cleanInput)
 		command := fieldsCommand[0]
+		arg1 := fieldsCommand[1]
 		fmt.Printf("You entered the command :%s\n", cleanInput)
 		switch game.GameMode {
 		case ModeRoom:
@@ -99,6 +100,16 @@ func main() {
 			switch command {
 			case "go":
 				// stuff
+				if exit, ok := player.CurrentRoom.Exits[arg1]; ok {
+					fmt.Println("")
+					fmt.Println("***************************")
+					fmt.Println("")
+					fmt.Println(exit.Description)
+					fmt.Println("***************************")
+					fmt.Println("")
+					player.CurrentRoom = exit.Destination
+					fmt.Println(player.CurrentRoom.Description)
+				}
 			case "look":
 				//stuff
 			case "take":
