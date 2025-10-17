@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/fatih/color"
 )
 
 const (
@@ -87,7 +89,12 @@ func main() {
 		CurrentRoom: &crashSite,
 		Inventory:   make(map[string]*Item),
 	}
-	baseExterior.Features[""]
+	baseExterior.Features["airlock"] = "stuff"
+	color.Red("[*] ENGINE FAILURE")
+	color.Red("[*] INITING EMERGENCY PROCEDURE")
+	color.Red("[*] ENTERING ATMOSPHERE")
+	color.Red("[*] PREPARING FOR THE IMPACT")
+	color.Red("***************************")
 	for {
 		fmt.Println("")
 		fmt.Print(">")
@@ -124,7 +131,16 @@ func main() {
 			case "look":
 				//stuff
 			case "take":
-				//stuff
+				if item, ok := player.CurrentRoom.Items[arg1]; ok {
+					fmt.Println("")
+					fmt.Println("***************************")
+					fmt.Println("")
+					fmt.Println("Taking : ", item)
+					player.Inventory[arg1] = item
+					delete(player.CurrentRoom.Items, arg1)
+				} else {
+					fmt.Println("You can;t take this")
+				}
 			case "use":
 				//stuff
 			default:
