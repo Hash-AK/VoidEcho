@@ -66,7 +66,7 @@ func main() {
 		Exits:       make(map[string]*Exit),
 	}
 	solarArray.Items["battery"] = &Item{
-		Name:        "Battery",
+		Name:        "battery",
 		Description: "A battery. Can server to power electrical devices for a short time.",
 	}
 	crashSite.Exits["east"] = &Exit{
@@ -89,7 +89,7 @@ func main() {
 		CurrentRoom: &crashSite,
 		Inventory:   make(map[string]*Item),
 	}
-	baseExterior.Features["airlock"] = "stuff"
+	baseExterior.Features["airlock"] = "The base's airlock."
 	color.Red("[*] ENGINE FAILURE")
 	color.Red("[*] INITING EMERGENCY PROCEDURE")
 	color.Red("[*] ENTERING ATMOSPHERE")
@@ -126,7 +126,7 @@ func main() {
 					player.CurrentRoom = exit.Destination
 					fmt.Println(player.CurrentRoom.Description)
 				} else {
-					fmt.Println("You cannot go this way!")
+					fmt.Println("[*] SYSTEM ERROR : NO PATH GOING TOWARD THIS WAY.")
 				}
 			case "look":
 				if len(fieldsCommand) == 1 {
@@ -137,11 +137,11 @@ func main() {
 					for _, item := range player.CurrentRoom.Items {
 						thingToSee = append(thingToSee, "a "+item.Name)
 					}
-					for _, featureKey := range player.CurrentRoom.Features {
-						thingToSee = append(thingToSee, "a "+featureKey)
+					for featureName := range player.CurrentRoom.Features {
+						thingToSee = append(thingToSee, "a "+featureName)
 					}
-					for _, exitsKey := range player.CurrentRoom.Exits {
-						thingToSee = append(thingToSee, "an exit toward the "+exitsKey.Destination.Name)
+					for direction, exit := range player.CurrentRoom.Exits {
+						thingToSee = append(thingToSee, "an exit toward the "+direction+" leading to "+exit.Destination.Name)
 					}
 					if len(thingToSee) > 0 {
 						fmt.Println("")
