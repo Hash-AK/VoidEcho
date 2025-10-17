@@ -161,10 +161,22 @@ func main() {
 					player.Inventory[arg1] = item
 					delete(player.CurrentRoom.Items, arg1)
 				} else {
-					fmt.Println("You can't take this")
+					fmt.Println("[*] SYSTEM ERROR : ITEM NOT FOUND]")
 				}
 			case "use":
-				//stuff
+				if arg1 == "battery" {
+					if _, ok := player.Inventory["battery"]; ok {
+						if player.CurrentRoom == &baseExterior {
+							// do shtuff because power
+						} else {
+							fmt.Println("[*] SYSTEM ERROR : NOT IN THE CURRENT ROOM.")
+						}
+					} else {
+						fmt.Println("[*] SYSTEM ERROR : ITEM NOT IN INVENTORY.")
+					}
+				} else {
+					fmt.Println("[*] SYSTEM ERROR : CANNOT USE THIS ITEM.")
+				}
 			default:
 				fmt.Println("Unknown command in room mode.")
 
