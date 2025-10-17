@@ -43,6 +43,17 @@ type Room struct {
 	Features    map[string]string
 }
 
+func aOrAn(s string) string {
+	if s == "" {
+		return "a"
+	}
+	switch strings.ToLower(string(s[0])) {
+	case "a", "e", "i", "o", "u":
+		return "an"
+	default:
+		return "a"
+	}
+}
 func main() {
 	reader := bufio.NewReader(os.Stdin)
 	game := Game{
@@ -135,10 +146,12 @@ func main() {
 					fmt.Println(player.CurrentRoom.Description)
 					var thingToSee []string
 					for _, item := range player.CurrentRoom.Items {
-						thingToSee = append(thingToSee, "a "+item.Name)
+						prefix := aOrAn(item.Name)
+						thingToSee = append(thingToSee, prefix+" "+item.Name)
 					}
 					for featureName := range player.CurrentRoom.Features {
-						thingToSee = append(thingToSee, "a "+featureName)
+						prefix := aOrAn(featureName)
+						thingToSee = append(thingToSee, prefix+" "+featureName)
 					}
 					for direction, exit := range player.CurrentRoom.Exits {
 						thingToSee = append(thingToSee, "an exit toward the "+direction+" leading to "+exit.Destination.Name)
