@@ -38,6 +38,7 @@ type Room struct {
 	Description string
 	Exits       map[string]*Exit
 	Items       map[string]*Item
+	Features    map[string]string
 }
 
 func main() {
@@ -54,6 +55,7 @@ func main() {
 		Name:        "The Base's Exterior",
 		Description: "Empty for now.",
 		Exits:       make(map[string]*Exit),
+		Features:    make(map[string]string),
 	}
 	solarArray := Room{
 		Name:        "The Solar Array",
@@ -85,14 +87,14 @@ func main() {
 		CurrentRoom: &crashSite,
 		Inventory:   make(map[string]*Item),
 	}
-	var arg1 string
-	var arg2 string
+	baseExterior.Features[""]
 	for {
 		fmt.Println("")
 		fmt.Print(">")
 		input, _ := reader.ReadString('\n')
 		cleanInput := strings.TrimSpace(input)
 		fieldsCommand := strings.Fields(cleanInput)
+		var arg1, arg2 string
 		command := fieldsCommand[0]
 		if len(fieldsCommand) > 1 {
 			arg1 = fieldsCommand[1]
