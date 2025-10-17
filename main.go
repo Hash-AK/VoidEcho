@@ -109,7 +109,7 @@ func main() {
 		if len(fieldsCommand) > 2 {
 			arg2 = fieldsCommand[2]
 		}
-		fmt.Printf("You entered the command :%s\n", cleanInput)
+		fmt.Printf("You entered the command : %s\n", cleanInput)
 		switch game.GameMode {
 		case ModeRoom:
 			//stuff for when outside
@@ -129,17 +129,39 @@ func main() {
 					fmt.Println("You cannot go this way!")
 				}
 			case "look":
-				//stuff
+				if len(fieldsCommand) == 1 {
+					fmt.Println("")
+					fmt.Println("You are in : " + player.CurrentRoom.Name)
+					fmt.Println(player.CurrentRoom.Description)
+					var thingToSee []string
+					for _, item := range player.CurrentRoom.Items {
+						thingToSee = append(thingToSee, "a "+item.Name)
+					}
+					for _, featureKey := range player.CurrentRoom.Features {
+						thingToSee = append(thingToSee, "a "+featureKey)
+					}
+					for _, exitsKey := range player.CurrentRoom.Exits {
+						thingToSee = append(thingToSee, "an exit toward the "+exitsKey.Destination.Name)
+					}
+					if len(thingToSee) > 0 {
+						fmt.Println("")
+						fmt.Println("You also see :")
+						for _, thing := range thingToSee {
+							fmt.Println(" - ", thing)
+						}
+
+					}
+				}
 			case "take":
 				if item, ok := player.CurrentRoom.Items[arg1]; ok {
 					fmt.Println("")
 					fmt.Println("***************************")
 					fmt.Println("")
-					fmt.Println("Taking : ", item)
+					fmt.Println("Taking : ", item.Name)
 					player.Inventory[arg1] = item
 					delete(player.CurrentRoom.Items, arg1)
 				} else {
-					fmt.Println("You can;t take this")
+					fmt.Println("You can't take this")
 				}
 			case "use":
 				//stuff
