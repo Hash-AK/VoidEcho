@@ -66,7 +66,54 @@ func typeWrite(text string, delay int, textColor ...color.Attribute) {
 		time.Sleep(time.Duration(totalDelay))
 	}
 }
+func parseMap(mapString string) (world [][]int, startX int, startY int) {
+	lines := strings.Split(strings.TrimSpace(mapString), "\n")
+	world = make([][]int, len(lines))
+	startX, startY = -1, -1
+	for y, line := range lines {
+		trimmedline := strings.TrimSpace(line)
+		world[y] = make([]int, len(trimmedline))
+		for x, char := range trimmedline {
+			var tile = 0
+			switch char {
+			case '#':
+				tile = 1
+			case 'D':
+				tile = 2
+			case '1':
+				tile = 4
+			case '2':
+				tile = 5
+			case '3':
+				tile = 6
+			case '@':
+				startX, startY = x, y
+				tile = 0
+			default:
+				tile = 0
+			}
+			world[y][x] = tile
+		}
+
+	}
+	return world, startX, startY
+}
 func main() {
+	baseMapString := `
+######################################################
+#   #               #                 #        (N2)  #
+# @ #    (N1)                         # (3)          #
+#   ########        #                 ##### ###################
+#          #        #                 D              #        #
+########   #        #                 #####         (D)   (T3)#
+#      #   ##########   (T1)          # (T2)         #        #
+#  (1)     #        #######           #########################
+########   #      ################ #########        #
+#      #   #        D                      #        #
+#                 #####                    D    (2) #
+#####################################################
+	`
+	worldGrid, startX, startY := parseMap(baseMapString)
 	reader := bufio.NewReader(os.Stdin)
 	crashSite := Room{
 		Name:        "The Crash Site",
@@ -108,10 +155,14 @@ func main() {
 	player := Player{
 		CurrentRoom: &crashSite,
 		Inventory:   make(map[string]*Item),
+		X:           startX,
+		Y:           startY,
 	}
 	game := Game{
 		GameMode: ModeRoom,
 		Player:   player,
+		World:    worldGrid,
+		PowerOn:  true,
 	}
 
 	baseExterior.Features["airlock"] = "The base's airlock."
@@ -224,6 +275,7 @@ func main() {
 						if player.CurrentRoom == &baseExterior {
 							fmt.Println("You open the control pannel, plug the two terminal of the battery, and then SHWOOSH! The airlock open wide! As you clicky enter inside, the lock close behidn you, and all the light's goes down : the battery didn't last long. You're now compeltly in the dark, and can't go behind. You will need to use your suit's sensors to move around and bring back the power...")
 							delete(player.Inventory, "battery")
+							game.PowerOn = false
 							game.GameMode = ModeGrid
 						} else {
 							fmt.Println("[*] SYSTEM ERROR : NOT IN THE CURRENT ROOM.")
@@ -250,6 +302,8 @@ func main() {
 
 		case ModeGrid:
 			//stuff for when no light and when inside in general
+			player.X = startX
+			player.Y = startY
 			switch command {
 			case "go":
 				direction := arg1
