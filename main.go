@@ -78,7 +78,7 @@ func main() {
 	}
 	solarArray.Items["battery"] = &Item{
 		Name:        "battery",
-		Description: "A battery. Can server to power electrical devices for a short time.",
+		Description: "A battery. Can serve to power electrical devices for a short amount of time.",
 	}
 	crashSite.Exits["east"] = &Exit{
 		Description: "Empty for noww",
@@ -143,6 +143,7 @@ func main() {
 			case "look":
 				if len(fieldsCommand) == 1 {
 					fmt.Println("")
+					fmt.Println("[*] SYSTEM REPORT INCOMING :")
 					fmt.Println("You are in : " + player.CurrentRoom.Name)
 					fmt.Println(player.CurrentRoom.Description)
 					var thingToSee []string
@@ -163,9 +164,31 @@ func main() {
 						for _, thing := range thingToSee {
 							fmt.Println(" - ", thing)
 						}
+						break
 
+					} else {
+						fmt.Println("[*] SYSTEM REPORT : THERE'S NOTHING ELSE TO SEE HERE.")
 					}
 				}
+				target := arg1
+				if item, ok := player.Inventory[target]; ok {
+					fmt.Println("In your inventory : ")
+					fmt.Println(" * ", item.Name, " - ", item.Description)
+					break
+
+				}
+				if item, ok := player.CurrentRoom.Items[target]; ok {
+					fmt.Println("Items around you : ")
+					fmt.Println(" * ", item.Name, " - ", item.Description)
+					break
+				}
+				if feature, ok := player.CurrentRoom.Features[target]; ok {
+					fmt.Println("Features around you : ")
+					fmt.Println(" * ", feature)
+					break
+
+				}
+				fmt.Println("[*] SYSTEM ERROR : NOTHING NAMED : ", target, " IN THE SURROUNDING.")
 			case "take":
 				if item, ok := player.CurrentRoom.Items[arg1]; ok {
 					fmt.Println("")
@@ -200,6 +223,7 @@ func main() {
 				fmt.Println("[*] Help menu :")
 				fmt.Println("go [north/south/east/west] - go in the specified direction, if a path exist.")
 				fmt.Println("look - Describe the surrounding, the items around, the different paths, etc.")
+				fmt.Println("look [item/feature name] - Look at the specified item or feature, if it exists in the current room.")
 				fmt.Println("take [item name] - Take the specified item name, if it exists in the current location.")
 				fmt.Println("use [item] - Use the specified item if a) it exists in the inventory and b) it can be used in the current location.")
 
