@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/fatih/color"
 )
@@ -54,11 +55,19 @@ func aOrAn(s string) string {
 		return "a"
 	}
 }
+func typeWrite(text string, delay int, textColor ...color.Attribute) {
+	if len(textColor) > 0 {
+		color.Set(textColor...)
+		defer color.Unset()
+	}
+	for _, char := range text {
+		fmt.Printf("%c", char)
+		totalDelay := delay * int(time.Millisecond)
+		time.Sleep(time.Duration(totalDelay))
+	}
+}
 func main() {
 	reader := bufio.NewReader(os.Stdin)
-	game := Game{
-		GameMode: ModeRoom,
-	}
 	crashSite := Room{
 		Name:        "The Crash Site",
 		Description: "Empty for now.",
@@ -100,12 +109,19 @@ func main() {
 		CurrentRoom: &crashSite,
 		Inventory:   make(map[string]*Item),
 	}
+	game := Game{
+		GameMode: ModeRoom,
+		Player:   player,
+	}
+
 	baseExterior.Features["airlock"] = "The base's airlock."
-	color.Red("[*] ENGINE FAILURE")
-	color.Red("[*] INITING EMERGENCY PROCEDURE")
-	color.Red("[*] ENTERING ATMOSPHERE")
-	color.Red("[*] PREPARING FOR THE IMPACT")
-	color.Red("[*] IMPACT IN 3, 2, 1.....")
+	typeWrite("[*] ENGINE FAILURE\n", 40, color.FgRed)
+	typeWrite("[*] INITING EMERGENCY PROCEDURES\n", 40, color.FgRed)
+	typeWrite("[*] ACTIVATING EMERGENCY TERMAL SHIELDS\n", 40, color.FgRed)
+	typeWrite("[*] ENTERING ATMOSPHERE\n", 40, color.FgRed)
+	typeWrite("[*] PREPARING FOR THE IMPACT\n", 40, color.FgRed)
+	typeWrite("[*] IMPACT IN :", 40, color.FgRed)
+	typeWrite("  3, 2, 1.....\n", 500, color.FgRed)
 	color.Red("***************************")
 	for {
 		fmt.Println("")
@@ -127,7 +143,6 @@ func main() {
 			//stuff for when outside
 			switch command {
 			case "go":
-				// stuff
 				if exit, ok := player.CurrentRoom.Exits[arg1]; ok {
 					fmt.Println("")
 					fmt.Println("***************************")
@@ -197,6 +212,7 @@ func main() {
 					fmt.Println("Taking : ", item.Name)
 					player.Inventory[arg1] = item
 					delete(player.CurrentRoom.Items, arg1)
+					fmt.Println("You took", arg1, "and put it in your inventory.")
 				} else if len(fieldsCommand) > 1 {
 					fmt.Println("[*] SYSTEM ERROR : ITEM NOT FOUND : ", arg1)
 				} else {
