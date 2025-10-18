@@ -1,5 +1,26 @@
+----EXTERIOR-----
+
 <crash site> ----> <base exterior>
                         |
                         |
                         v
                     <solar array>
+
+
+----INTERIOR-----
+
+Entrance :
+#####################
+#   #               #
+# @ #               #
+#   #########       #
+#           #       #
+########    #       #
+#      #    #       #
+#  (1)      #       #
+########    #     # #
+#                 #D#
+#                 # #
+#####################
+1 = Electrical room 
+D = door to rest

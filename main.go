@@ -122,7 +122,7 @@ func main() {
 	typeWrite("[*] PREPARING FOR THE IMPACT\n", 40, color.FgRed)
 	typeWrite("[*] IMPACT IN :", 40, color.FgRed)
 	typeWrite("  3, 2, 1.....\n", 500, color.FgRed)
-	color.Red("***************************")
+	typeWrite("***************************", 40, color.FgRed)
 	for {
 		fmt.Println("")
 		fmt.Print(">")
