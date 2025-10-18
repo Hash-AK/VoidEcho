@@ -105,6 +105,7 @@ func main() {
 	color.Red("[*] INITING EMERGENCY PROCEDURE")
 	color.Red("[*] ENTERING ATMOSPHERE")
 	color.Red("[*] PREPARING FOR THE IMPACT")
+	color.Red("[*] IMPACT IN 3, 2, 1.....")
 	color.Red("***************************")
 	for {
 		fmt.Println("")
@@ -173,8 +174,10 @@ func main() {
 					fmt.Println("Taking : ", item.Name)
 					player.Inventory[arg1] = item
 					delete(player.CurrentRoom.Items, arg1)
+				} else if len(fieldsCommand) > 1 {
+					fmt.Println("[*] SYSTEM ERROR : ITEM NOT FOUND : ", arg1)
 				} else {
-					fmt.Println("[*] SYSTEM ERROR : ITEM NOT FOUND]")
+					fmt.Println("[*] SYSTEM ERROR : PLEASE SPECIFY AN ITEM TO TAKE")
 				}
 			case "use":
 				if arg1 == "battery" {
@@ -192,8 +195,16 @@ func main() {
 				} else {
 					fmt.Println("[*] SYSTEM ERROR : CANNOT USE THIS ITEM.")
 				}
+			case "help":
+				fmt.Println("")
+				fmt.Println("[*] Help menu :")
+				fmt.Println("go [north/south/east/west] - go in the specified direction, if a path exist.")
+				fmt.Println("look - Describe the surrounding, the items around, the different paths, etc.")
+				fmt.Println("take [item name] - Take the specified item name, if it exists in the current location.")
+				fmt.Println("use [item] - Use the specified item if a) it exists in the inventory and b) it can be used in the current location.")
+
 			default:
-				fmt.Println("Unknown command in room mode.")
+				fmt.Println("[*] SYSTEM ERROR : UNKNOWN COMMAND IN ROOM MODE.")
 
 			}
 
@@ -204,6 +215,8 @@ func main() {
 				direction := arg1
 				distance := arg2
 				fmt.Println(direction, distance)
+			default:
+				fmt.Println("[*] SYSTEM ERROR : UNKNOWN COMMAND IN GRID MODE.")
 			}
 		}
 	}
