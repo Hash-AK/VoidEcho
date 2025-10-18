@@ -310,7 +310,7 @@ func main() {
 				for dist := 1; ; dist++ {
 					checkY := game.Player.Y - dist
 					if checkY < 0 || game.World[checkY][game.Player.X] == 1 {
-						fmt.Printf("[*] SENSOR REPORT : Wall detected to the North at %d units\n", dist)
+						fmt.Printf("[*] SENSOR REPORT : Wall detected to the North at %d units.\n", dist)
 						break
 					}
 
@@ -319,11 +319,27 @@ func main() {
 				for dist := 1; ; dist++ {
 					checkY := game.Player.Y + dist
 					if checkY > len(game.World) || game.World[checkY][game.Player.X] == 1 {
-						fmt.Printf("[*] SENSOR REPORT : Wall detected to the South at %d units\n", dist)
+						fmt.Printf("[*] SENSOR REPORT : Wall detected to the South at %d units.\n", dist)
 						break
 
 					}
 				}
+				// East piginging
+				for dist := 1; ; dist++ {
+					checkX := game.Player.X + dist
+					if checkX >= len(game.World[game.Player.Y]) || game.World[game.Player.Y][checkX] == 1 {
+						fmt.Printf("[*] SENSOR REPORT : Wall detected to the East at %d units.\n", dist)
+						break
+					}
+				}
+				for dist := 1; ; dist++ {
+					checkX := game.Player.X - dist
+					if checkX < 0 || game.World[game.Player.Y][checkX] == 1 {
+						fmt.Printf("[*] SENSOR REPORT : Wall detected to the West at %d units.\n", dist)
+						break
+					}
+				}
+
 			case "go":
 				direction := arg1
 				distance := arg2
