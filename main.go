@@ -305,6 +305,25 @@ func main() {
 			player.X = startX
 			player.Y = startY
 			switch command {
+			case "ping":
+				// North pinggging
+				for dist := 1; ; dist++ {
+					checkY := game.Player.Y - dist
+					if checkY < 0 || game.World[checkY][game.Player.X] == 1 {
+						fmt.Printf("[*] SENSOR REPORT : Wall detected to the North at %d units\n", dist)
+						break
+					}
+
+				}
+				// South pinging
+				for dist := 1; ; dist++ {
+					checkY := game.Player.Y + dist
+					if checkY > len(game.World) || game.World[checkY][game.Player.X] == 1 {
+						fmt.Printf("[*] SENSOR REPORT : Wall detected to the South at %d units\n", dist)
+						break
+
+					}
+				}
 			case "go":
 				direction := arg1
 				distance := arg2
