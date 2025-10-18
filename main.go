@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"time"
 
@@ -302,8 +303,6 @@ func main() {
 
 		case ModeGrid:
 			//stuff for when no light and when inside in general
-			player.X = startX
-			player.Y = startY
 			switch command {
 			case "ping":
 				// North pinggging
@@ -318,7 +317,7 @@ func main() {
 				// South pinging
 				for dist := 1; ; dist++ {
 					checkY := game.Player.Y + dist
-					if checkY > len(game.World) || game.World[checkY][game.Player.X] == 1 {
+					if checkY >= len(game.World) || game.World[checkY][game.Player.X] == 1 {
 						fmt.Printf("[*] SENSOR REPORT : Wall detected to the South at %d units.\n", dist)
 						break
 
@@ -343,10 +342,23 @@ func main() {
 			case "go":
 				direction := arg1
 				distance := arg2
-				fmt.Println(direction, distance)
-			default:
-				fmt.Println("[*] SYSTEM ERROR : UNKNOWN COMMAND IN GRID MODE.")
+				if len(direction) > 0 {
+					if len(distance) > 0 {
+						distanceInt, err := strconv.Atoi(distance)
+						if err != nil {
+							fmt.Println("[*] SYSTEM ERROR : distance IS NOT A NUMBER.")
+						}
+						fmt.Println(distanceInt)
+					} else {
+						fmt.Println("[*] SYSTEM ERROR : USE THE COMMAND 'go' WITH THE ADDITIONAL ARGUMENT : distance.")
+					}
+				} else {
+					fmt.Println("[*] SYSTEM ERROR : USE THE COMMAND 'go' WITH THE FOLLOWING ARGUMENTS : direction and distance.")
+				}
+
 			}
+		default:
+			fmt.Println("[*] SYSTEM ERROR : UNKNOWN COMMAND IN GRID MODE.")
 		}
 	}
 }
