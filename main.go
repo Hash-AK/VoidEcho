@@ -180,7 +180,9 @@ func main() {
 				if arg1 == "battery" {
 					if _, ok := player.Inventory["battery"]; ok {
 						if player.CurrentRoom == &baseExterior {
-							// do shtuff because power
+							fmt.Println("You open the control pannel, plug the two terminal of the battery, and then SHWOOSH! The airlock open wide! As you clicky enter inside, the lock close behidn you, and all the light's goes down : the battery didn't last long. You're now compeltly in the dark, and can't go behind. You will need to use your suit's sensors to move around and bring back the power...")
+							delete(player.Inventory, "battery")
+							game.GameMode = ModeGrid
 						} else {
 							fmt.Println("[*] SYSTEM ERROR : NOT IN THE CURRENT ROOM.")
 						}
