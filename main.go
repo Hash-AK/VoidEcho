@@ -81,12 +81,7 @@ func parseMap(mapString string) (world [][]int, startX int, startY int) {
 				tile = 1
 			case 'D':
 				tile = 2
-			case '1':
-				tile = 4
-			case '2':
-				tile = 5
-			case '3':
-				tile = 6
+
 			case '@':
 				startX, startY = x, y
 				tile = 0
@@ -102,15 +97,15 @@ func parseMap(mapString string) (world [][]int, startX int, startY int) {
 func main() {
 	baseMapString := `
 ######################################################
-#   #               #                 #        (N2)  #
-# @ #    (N1)                         # (3)          #
-#   ########        #                 ##### ###################
-#          #        #                 D              #        #
-########   #        #                 #####         (D)   (T3)#
-#      #   ##########   (T1)          # (T2)         #        #
+## ##               #                 #        (N2)  #
+##@##    (N1)                         # (3)          #
+## #########        #                 ##### ###################
+########## #        #                 D              #        #
+########## #        #                 #####         (D)   (T3)#
+#      ### ##########   (T1)          # (T2)         #        #
 #  (1)     #        #######           #########################
-########   #      ################ #########        #
-#      #   #        D                      #        #
+########## #      ################ #########        #
+#      ### #        D                      #        #
 #                 #####                    D    (2) #
 #####################################################
 	`
@@ -309,7 +304,8 @@ func main() {
 				for dist := 1; ; dist++ {
 					checkY := game.Player.Y - dist
 					if checkY < 0 || game.World[checkY][game.Player.X] == 1 {
-						fmt.Printf("[*] SENSOR REPORT : Wall detected to the North at %d units.\n", dist)
+						safeStep := dist - 1
+						fmt.Printf("[*] SENSOR REPORT : Path clear for %d units to the North.\n", safeStep)
 						break
 					}
 
@@ -318,7 +314,8 @@ func main() {
 				for dist := 1; ; dist++ {
 					checkY := game.Player.Y + dist
 					if checkY >= len(game.World) || game.World[checkY][game.Player.X] == 1 {
-						fmt.Printf("[*] SENSOR REPORT : Wall detected to the South at %d units.\n", dist)
+						safeStep := dist - 1
+						fmt.Printf("[*] SENSOR REPORT : Path Clear for %d units to the South.\n", safeStep)
 						break
 
 					}
@@ -327,14 +324,16 @@ func main() {
 				for dist := 1; ; dist++ {
 					checkX := game.Player.X + dist
 					if checkX >= len(game.World[game.Player.Y]) || game.World[game.Player.Y][checkX] == 1 {
-						fmt.Printf("[*] SENSOR REPORT : Wall detected to the East at %d units.\n", dist)
+						safeStep := dist - 1
+						fmt.Printf("[*] SENSOR REPORT : Path clear for %d units to the East.\n", safeStep)
 						break
 					}
 				}
 				for dist := 1; ; dist++ {
 					checkX := game.Player.X - dist
 					if checkX < 0 || game.World[game.Player.Y][checkX] == 1 {
-						fmt.Printf("[*] SENSOR REPORT : Wall detected to the West at %d units.\n", dist)
+						safeStep := dist - 1
+						fmt.Printf("[*] SENSOR REPORT : Path clear for %d units to the West.\n", safeStep)
 						break
 					}
 				}
