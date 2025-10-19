@@ -166,7 +166,7 @@ func main() {
 	}
 	gridFeatures := make(map[string]GridFeature)
 	gridFeatures["7,4"] = GridFeature{Name: "lever", Description: "A power lever. Maybe actionning it could bring back power?"}
-
+	gridFeatures["6,25"] = GridFeature{Name: "terminal1", Description: "A Computer terminal. It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1"}
 	baseExterior.Features["airlock"] = "The base's airlock."
 	typeWrite("[*] ENGINE FAILURE\n", 40, color.FgRed)
 	typeWrite("[*] INITING EMERGENCY PROCEDURES\n", 40, color.FgRed)
@@ -465,7 +465,7 @@ func main() {
 							fmt.Println("[*] SYSTEM REPORT : Main pwoer already online.")
 
 						} else {
-							fmt.Println("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything.")
+							fmt.Println("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything. You can now use the command 'map' to see the full map of the base.")
 							game.PowerOn = true
 							originalFeature := gridFeatures[featureCoord]
 							originalFeature.Description = "The power lever is now in the 'ON' position."
@@ -481,8 +481,7 @@ func main() {
 				}
 			case "map":
 				if game.PowerOn == false {
-					//stuff for knownmap
-
+					fmt.Println("[*] SYSTEM ERROR: To use the command 'map' you need the power back on first.")
 				} else {
 					//stuff for full map
 					fmt.Println("\n--- STATION BLUEPRINTS ---")
@@ -492,6 +491,10 @@ func main() {
 								color.Set(color.FgGreen)
 								fmt.Print("@")
 								color.Unset()
+							} else if x == 42 && y == 10 {
+								fmt.Print("T")
+							} else if x == 38 && y == 6 {
+								fmt.Print("1")
 							} else {
 								switch tile {
 								case 1:
@@ -508,7 +511,7 @@ func main() {
 					}
 				}
 				fmt.Println("-------------------")
-				fmt.Println("D = door, # = wall, @ = player position.")
+				fmt.Println("D = door, # = wall, @ = player position. T1 is terminal1")
 			}
 
 		default:
