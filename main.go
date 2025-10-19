@@ -137,19 +137,19 @@ func main() {
 		Description: "A battery. Can serve to power electrical devices for a short amount of time.",
 	}
 	crashSite.Exits["east"] = &Exit{
-		Description: "Empty for noww",
+		Description: " ",
 		Destination: &baseExterior,
 	}
 	baseExterior.Exits["south"] = &Exit{
-		Description: "Emptyyy",
+		Description: " ",
 		Destination: &solarArray,
 	}
 	baseExterior.Exits["west"] = &Exit{
-		Description: "Empty",
+		Description: " ",
 		Destination: &crashSite,
 	}
 	solarArray.Exits["north"] = &Exit{
-		Description: "Emptyed",
+		Description: " ",
 		Destination: &baseExterior,
 	}
 	player := Player{
@@ -165,9 +165,15 @@ func main() {
 		PowerOn:  true,
 	}
 	gridFeatures := make(map[string]GridFeature)
-	gridFeatures["7,4"] = GridFeature{Name: "lever", Description: "A power lever. Maybe actionning it could bring back power?"}
-	gridFeatures["6,25"] = GridFeature{Name: "terminal1", Description: "A Computer terminal. It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1"}
+	gridFeatures["4,7"] = GridFeature{Name: "lever", Description: "A power lever. Maybe actionning it could bring back power?"}
+	gridFeatures["25,6"] = GridFeature{Name: "terminal1", Description: "A Computer terminal. It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1'. It seems to require a password thought."}
+	gridFeatures["38,6"] = GridFeature{Name: "terminal2", Description: "A terminal necessary to open the door of the Radio Station. Require the keycard from the Equipement Room."}
+	gridFeatures["9,2"] = GridFeature{Name: "note1", Description: "A note (N1). It reads:\nThe password is 'VOID'."}
+	gridFeatures["43,10"] = GridFeature{Name: "keycard", Description: "A shiny access keycard"}
+	gridFeatures["43,5"] = GridFeature{Name: "radio", Description: "The long-range communication radio. Permit to contact the Earth."}
 	baseExterior.Features["airlock"] = "The base's airlock."
+	var equipementRoomLocked = true
+	var radioRoomLocked = true
 	typeWrite("[*] ENGINE FAILURE\n", 40, color.FgRed)
 	typeWrite("[*] INITING EMERGENCY PROCEDURES\n", 40, color.FgRed)
 	typeWrite("[*] ACTIVATING EMERGENCY TERMAL SHIELDS\n", 40, color.FgRed)
@@ -381,8 +387,18 @@ func main() {
 								break
 							}
 							if nextTile == 2 {
-								fmt.Println("[*] SENSORT REPORT : MOVEMENT HALTED. Airlock unlocking procedure required.")
-								break
+								if nextX == 33 && nextY == 4 {
+									if equipementRoomLocked {
+										fmt.Println("[*] MOVEMENT HALTED. The Equipement Room door is locked.")
+										break
+									}
+								}
+								if nextX == 43 && nextY == 5 {
+									if radioRoomLocked {
+										fmt.Println("[*] MOVEMENT HALTED. The Radio Room Door is locked.")
+									}
+								}
+
 							}
 							game.Player.X = nextX
 							game.Player.Y = nextY
@@ -487,14 +503,18 @@ func main() {
 					fmt.Println("\n--- STATION BLUEPRINTS ---")
 					for y, row := range game.World {
 						for x, tile := range row {
+							currentPosKey := fmt.Sprintf("%d,%d", x, y)
+							if feature, ok := gridFeatures[currentPosKey]; ok {
+								color.Set(color.FgYellow)
+								fmt.Print(strings.ToUpper(string(feature.Name[0])))
+								color.Unset()
+								continue
+							}
 							if game.Player.X == x && game.Player.Y == y {
 								color.Set(color.FgGreen)
 								fmt.Print("@")
 								color.Unset()
-							} else if x == 42 && y == 10 {
-								fmt.Print("T")
-							} else if x == 38 && y == 6 {
-								fmt.Print("1")
+
 							} else {
 								switch tile {
 								case 1:
@@ -511,7 +531,7 @@ func main() {
 					}
 				}
 				fmt.Println("-------------------")
-				fmt.Println("D = door, # = wall, @ = player position. T1 is terminal1")
+				fmt.Println("D = door, # = wall, @ = player position. T/L/N = features")
 			}
 
 		default:
