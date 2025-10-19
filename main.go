@@ -167,9 +167,9 @@ func main() {
 	gridFeatures := make(map[string]GridFeature)
 	gridFeatures["4,7"] = GridFeature{Name: "lever", Description: "A power lever. Maybe actionning it could bring back power?"}
 	gridFeatures["25,6"] = GridFeature{Name: "terminal1", Description: "A Computer terminal. It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1'. It seems to require a password thought."}
-	gridFeatures["38,6"] = GridFeature{Name: "terminal2", Description: "A terminal necessary to open the door of the Radio Station. Require the keycard from the Equipement Room."}
+	gridFeatures["39,6"] = GridFeature{Name: "terminal2", Description: "A terminal necessary to open the door of the Radio Station. Require the keycard from the Equipement Room."}
 	gridFeatures["9,2"] = GridFeature{Name: "note1", Description: "A note (N1). It reads:\nThe password is 'VOID'."}
-	gridFeatures["43,10"] = GridFeature{Name: "keycard", Description: "A shiny access keycard"}
+	gridFeatures["61,10"] = GridFeature{Name: "keycard", Description: "A shiny access keycard"}
 	gridFeatures["43,5"] = GridFeature{Name: "radio", Description: "The long-range communication radio. Permit to contact the Earth."}
 	baseExterior.Features["airlock"] = "The base's airlock."
 	var equipementRoomLocked = true
@@ -535,7 +535,7 @@ func main() {
 
 				}
 				fmt.Println("-------------------")
-				fmt.Println("D = door, # = wall, @ = player position. T/L/N = features")
+				fmt.Println("D = door, # = wall, @ = player position. T = terminal, N = note, L = lever, R = radio, K = keytag")
 			case "help":
 				fmt.Println("")
 				fmt.Println("help - display this help menu")

@@ -1,6 +1,6 @@
 ## VoidECho
-This is a text-based Go game, liek my previosu project TextHackventure.
-It is not compeltly finished yet, as the end goal isn't yet really reachable. This was made for siege.hackclub.com
+This is a text-based Go game, like my previous project TextHackventure.
+It is not completly finished yet, as the end goal isn't yet really reachable. This was made for siege.hackclub.com
 ## Gameplay
 There is two game 'modes' : 
 - 'Room' based : when you're outside the base, you mvoe around the location. You move around with commands like ```go north``` if your current room have an exit to the north. It's full commands list is the following :   
