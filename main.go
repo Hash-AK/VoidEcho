@@ -349,6 +349,45 @@ func main() {
 							fmt.Println("[*] SYSTEM ERROR : distance IS NOT A NUMBER.")
 						}
 						fmt.Println(distanceInt)
+						stepTaken := 0
+						for i := 0; i < distanceInt; i++ {
+							currentX, currentY := game.Player.X, game.Player.Y
+							nextX, nextY := currentX, currentY
+							switch direction {
+							case "north":
+								nextY--
+							case "south":
+								nextY++
+							case "east":
+								nextX++
+							case "west":
+								nextX--
+							default:
+								fmt.Println("[*] SYSTEM ERROR : UNKNOWN DIRECTION.")
+								goto endGoCommand
+							}
+							if nextY < 0 || nextY >= len(game.World) || nextX < 0 || nextX >= len(game.World[nextY]) {
+								fmt.Println("[*] SENSOR REPORT : IMPACT IMMINENT. You reached the edge of the structure. Movement halted.")
+							}
+							nextTile := game.World[nextY][nextX]
+							if nextTile == 1 {
+								fmt.Println("[*] SENSORT REPORT : IMPACT IMMINENT. Wall detected. Movement halted.")
+								break
+							}
+							if nextTile == 2 {
+								fmt.Println("[*] SENSORT REPORT : MOVEMENT HALTED. Airlock unlocking procedure required.")
+								break
+							}
+							game.Player.X = nextX
+							game.Player.Y = nextY
+							stepTaken++
+
+						}
+						if stepTaken > 0 {
+							fmt.Printf("[*] MOVEMENT REPORT : Moved %s %d steps. New coordinates: (%d, %d)\n", direction, stepTaken, game.Player.X, game.Player.Y)
+						}
+					endGoCommand:
+						break
 					} else {
 						fmt.Println("[*] SYSTEM ERROR : USE THE COMMAND 'go' WITH THE ADDITIONAL ARGUMENT : distance.")
 					}
