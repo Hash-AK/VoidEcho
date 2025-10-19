@@ -117,18 +117,18 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	crashSite := Room{
 		Name:        "The Crash Site",
-		Description: "Empty for now.",
+		Description: "You look around you : you're in the remmeneants of your space capsule. The takeoff from the base HCSW-3 turned dramatic : as your suit's sensors showed, there was an engine failure, which made your whole spaceship crash on the base. It crashed on some of the base's building, which cut the power in the base's main center. You're at a few meter of it. You mission is to get it, brign back power, then send an emergency call from the base's radio station.",
 		Exits:       make(map[string]*Exit),
 	}
 	baseExterior := Room{
 		Name:        "The Base's Exterior",
-		Description: "Empty for now.",
+		Description: "AS you reach the base's airlock, you realize that because there is no power, you won't be able to get in. You will need an external source of power to make the airlock open. You recall there's a battery near the Solar Pannel Array..",
 		Exits:       make(map[string]*Exit),
 		Features:    make(map[string]string),
 	}
 	solarArray := Room{
 		Name:        "The Solar Array",
-		Description: "Still empty.",
+		Description: "As you reach the Soalr Pannel Array, you find the. There's a locker with the battery in it. A quick glance on it's power level show that it's only at 5%... You will need to take it like that, anyways...",
 		Items:       make(map[string]*Item),
 		Exits:       make(map[string]*Exit),
 	}
@@ -427,12 +427,15 @@ func main() {
 			case "use":
 				itemToUse := arg1
 				if len(itemToUse) > 0 {
+					//fmt.Printf("DEBUG: Attempting to use item: --%s--\n", itemToUse)
 					var foundFeature *GridFeature
 					var featureCoord string
 					for coord, f := range gridFeatures {
+						fmt.Printf("DEBUG: Checking feature with name: --%s--\n", f.Name)
 						if f.Name == itemToUse {
+							//fmt.Println("DEBUG: Name match SUCCESS!")
 							var featureX, featureY int
-							fmt.Sscanf(coord, "%d,%d", &featureX, featureY)
+							fmt.Sscanf(coord, "%d,%d", &featureX, &featureY)
 							distX := game.Player.X - featureX
 							if distX < 0 {
 								distX = -distX
@@ -442,34 +445,37 @@ func main() {
 								distY = -distY
 							}
 							if (distX + distY) <= 3 {
-								foundFeature = &f
+								//fmt.Println("DEBUG: Proximity check SUCCESS!")
+								tempFeature := f
+								foundFeature = &tempFeature
 								featureCoord = coord
 								break
 							}
 						}
-						if foundFeature == nil {
-							fmt.Println("[*] SYSTEM ERROR: Cannot use '", itemToUse, "'. It is not in the immediate vicinity.")
-							break
-
-						}
-						switch foundFeature.Name {
-						case "lever":
-							if game.PowerOn {
-								fmt.Println("[*] SYSTEM REPORT : Main pwoer already online.")
-
-							} else {
-								fmt.Println("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything.")
-								game.PowerOn = true
-								originalFeature := gridFeatures[featureCoord]
-								originalFeature.Description = "The power lever is now in the 'ON' position."
-								gridFeatures[featureCoord] = originalFeature
-							}
-						default:
-							fmt.Println("[*] SYSTEM ERROR: you can't use the '", foundFeature.Name, "'in that way.")
-
-						}
+					}
+					if foundFeature == nil {
+						fmt.Println("DEBUG: 'foundfeature' is nil after search.")
+						fmt.Println("[*] SYSTEM ERROR: Cannot use '", itemToUse, "'. It is not in the immediate vicinity.")
+						break
 
 					}
+					switch foundFeature.Name {
+					case "lever":
+						if game.PowerOn {
+							fmt.Println("[*] SYSTEM REPORT : Main pwoer already online.")
+
+						} else {
+							fmt.Println("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything.")
+							game.PowerOn = true
+							originalFeature := gridFeatures[featureCoord]
+							originalFeature.Description = "The power lever is now in the 'ON' position."
+							gridFeatures[featureCoord] = originalFeature
+						}
+					default:
+						fmt.Println("[*] SYSTEM ERROR: you can't use the '", foundFeature.Name, "'in that way.")
+
+					}
+
 				} else {
 					fmt.Println("[*] SYSTEM ERROR : Please specify what item to use.")
 				}
