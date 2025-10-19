@@ -458,8 +458,15 @@ func main() {
 								fmt.Println("[*] SYSTEM REPORT : Main pwoer already online.")
 
 							} else {
-
+								fmt.Println("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything.")
+								game.PowerOn = true
+								originalFeature := gridFeatures[featureCoord]
+								originalFeature.Description = "The power lever is now in the 'ON' position."
+								gridFeatures[featureCoord] = originalFeature
 							}
+						default:
+							fmt.Println("[*] SYSTEM ERROR: you can't use the '", foundFeature.Name, "'in that way.")
+
 						}
 
 					}
