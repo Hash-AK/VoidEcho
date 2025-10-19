@@ -109,7 +109,7 @@ func main() {
 #      ### ##########   (T1)          # (T2)         #        #
 #  (1)     #        #######           #########################
 ########## #      ################ #########        #
-#      ### #        D                      #        #
+#      ### #                               #        #
 #                 #####                    D    (2) #
 #####################################################
 	`
@@ -479,6 +479,36 @@ func main() {
 				} else {
 					fmt.Println("[*] SYSTEM ERROR : Please specify what item to use.")
 				}
+			case "map":
+				if game.PowerOn == false {
+					//stuff for knownmap
+
+				} else {
+					//stuff for full map
+					fmt.Println("\n--- STATION BLUEPRINTS ---")
+					for y, row := range game.World {
+						for x, tile := range row {
+							if game.Player.X == x && game.Player.Y == y {
+								color.Set(color.FgGreen)
+								fmt.Print("@")
+								color.Unset()
+							} else {
+								switch tile {
+								case 1:
+									fmt.Print("#")
+								case 2:
+									fmt.Print("D")
+								default:
+									fmt.Print(".")
+								}
+							}
+						}
+						fmt.Println("")
+
+					}
+				}
+				fmt.Println("-------------------")
+				fmt.Println("D = door, # = wall, @ = player position.")
 			}
 
 		default:
