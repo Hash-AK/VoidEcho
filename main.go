@@ -396,7 +396,10 @@ func main() {
 								if nextX == 43 && nextY == 5 {
 									if radioRoomLocked {
 										fmt.Println("[*] MOVEMENT HALTED. The Radio Room Door is locked.")
+										break
 									}
+								} else {
+									fmt.Println("[*] MOVEMENT HALTED. Door is sealed.")
 								}
 
 							}
@@ -529,9 +532,19 @@ func main() {
 						fmt.Println("")
 
 					}
+
 				}
 				fmt.Println("-------------------")
 				fmt.Println("D = door, # = wall, @ = player position. T/L/N = features")
+			case "help":
+				fmt.Println("")
+				fmt.Println("help - display this help menu")
+				fmt.Println("ping - use your suit's sensors to scan the surrounding in a range of 3 units for obstacles.")
+				fmt.Println("go [north/south/east/west] (distance) - move in the specified direction, as logn as there is no wall/obstacles.")
+				fmt.Println("look - use your suit's sensors to scan for any object of interest in a range of 3 units.")
+				fmt.Println("map - when power is back on, show a full map of the base.")
+				fmt.Println("use [feature/item] - use the specified item, as long as you're at maximum 3 units of it.")
+				fmt.Println("")
 			}
 
 		default:
