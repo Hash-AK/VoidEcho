@@ -165,7 +165,7 @@ func main() {
 		PowerOn:  true,
 	}
 	gridFeatures := make(map[string]GridFeature)
-	gridFeatures["7,4"] = GridFeature{Name: "Electrical Room Lever", Description: "A power lever. Maybe actionning it could bring back power?"}
+	gridFeatures["7,4"] = GridFeature{Name: "lever", Description: "A power lever. Maybe actionning it could bring back power?"}
 
 	baseExterior.Features["airlock"] = "The base's airlock."
 	typeWrite("[*] ENGINE FAILURE\n", 40, color.FgRed)
@@ -424,7 +424,48 @@ func main() {
 				if !foundSomething {
 					fmt.Println("[*] SENSOR REPORT : No object of interest detected in the immediate vicinity.")
 				}
+			case "use":
+				itemToUse := arg1
+				if len(itemToUse) > 0 {
+					var foundFeature *GridFeature
+					var featureCoord string
+					for coord, f := range gridFeatures {
+						if f.Name == itemToUse {
+							var featureX, featureY int
+							fmt.Sscanf(coord, "%d,%d", &featureX, featureY)
+							distX := game.Player.X - featureX
+							if distX < 0 {
+								distX = -distX
+							}
+							distY := game.Player.Y - featureY
+							if distY < 0 {
+								distY = -distY
+							}
+							if (distX + distY) <= 3 {
+								foundFeature = &f
+								featureCoord = coord
+								break
+							}
+						}
+						if foundFeature == nil {
+							fmt.Println("[*] SYSTEM ERROR: Cannot use '", itemToUse, "'. It is not in the immediate vicinity.")
+							break
 
+						}
+						switch foundFeature.Name {
+						case "lever":
+							if game.PowerOn {
+								fmt.Println("[*] SYSTEM REPORT : Main pwoer already online.")
+
+							} else {
+
+							}
+						}
+
+					}
+				} else {
+					fmt.Println("[*] SYSTEM ERROR : Please specify what item to use.")
+				}
 			}
 
 		default:
