@@ -44,6 +44,10 @@ type Room struct {
 	Items       map[string]*Item
 	Features    map[string]string
 }
+type GridFeature struct {
+	Name        string
+	Description string
+}
 
 func aOrAn(s string) string {
 	if s == "" {
@@ -100,7 +104,7 @@ func main() {
 ## ##               #                 #        (N2)  #
 ##@##    (N1)                         # (3)          #
 ## #########        #                 ##### ###################
-########## #        #                 D              #        #
+##         #        #                 D              #        #
 ########## #        #                 #####         (D)   (T3)#
 #      ### ##########   (T1)          # (T2)         #        #
 #  (1)     #        #######           #########################
@@ -160,6 +164,8 @@ func main() {
 		World:    worldGrid,
 		PowerOn:  true,
 	}
+	gridFeatures := make(map[string]GridFeature)
+	gridFeatures["7,4"] = GridFeature{Name: "Electrical Room Lever", Description: "A power lever. Maybe actionning it could bring back power?"}
 
 	baseExterior.Features["airlock"] = "The base's airlock."
 	typeWrite("[*] ENGINE FAILURE\n", 40, color.FgRed)
@@ -367,6 +373,7 @@ func main() {
 							}
 							if nextY < 0 || nextY >= len(game.World) || nextX < 0 || nextX >= len(game.World[nextY]) {
 								fmt.Println("[*] SENSOR REPORT : IMPACT IMMINENT. You reached the edge of the structure. Movement halted.")
+								break
 							}
 							nextTile := game.World[nextY][nextX]
 							if nextTile == 1 {
@@ -393,10 +400,36 @@ func main() {
 				} else {
 					fmt.Println("[*] SYSTEM ERROR : USE THE COMMAND 'go' WITH THE FOLLOWING ARGUMENTS : direction and distance.")
 				}
+			case "look":
+				fmt.Println("[*] Proximity scanner activated...")
+				foundSomething := false
+				for coordStr, feature := range gridFeatures {
+					var featureX, featureY int
+					fmt.Sscanf(coordStr, "%d,%d", &featureX, &featureY)
+					distX := game.Player.X - featureX
+					if distX < 0 {
+						distX = -distX
+					}
+					distY := game.Player.Y - featureY
+					if distY < 0 {
+						distY = -distY
+					}
+					totalDist := distX + distY
+					if totalDist <= 3 {
+						fmt.Printf("[*] SENSOR REPORT : Object of interest detected in a range of %d units : %s\n", totalDist, feature.Description)
+						foundSomething = true
+					}
+
+				}
+				if !foundSomething {
+					fmt.Println("[*] SENSOR REPORT : No object of interest detected in the immediate vicinity.")
+				}
 
 			}
+
 		default:
 			fmt.Println("[*] SYSTEM ERROR : UNKNOWN COMMAND IN GRID MODE.")
+
 		}
 	}
 }
