@@ -1,9 +1,9 @@
 ## VoidECho
 This is a text-based Go game, like my previous project TextHackventure.
-It is not completly finished yet, as the end goal isn't yet really reachable. This was made for siege.hackclub.com
+ This was made for siege.hackclub.com. It follows this week's theme, 'signals', because the goal of the game is to read the space base's radio center, and send an emergency message trought the long-range frequency.
 ## Gameplay
-There is two game 'modes' : 
-- 'Room' based : when you're outside the base, you mvoe around the location. You move around with commands like ```go north``` if your current room have an exit to the north. It's full commands list is the following :   
+This game feautre two distinct gameplay modes that change as you progess throught the story : 
+- 'Room' based : when you're outside the base, you move around the location. You move around with commands like ```go north``` if your current room have an exit to the north. It's full commands list is the following :   
 ```go [north/south/east/west] - go in the specified direction, if a path exist.
 look - Describe the surrounding, the items around, the different paths, etc.
 look [item/feature name] - Look at the specified item or feature, if it exists in the current room.
@@ -20,3 +20,9 @@ look - use your suit's sensors to scan for any object of interest in a range of 
 map - when power is back on, show a full map of the base.
 use [feature/item] - use the specified item, as long as you're at maximum 3 units of it.
 ```
+## Installation 
+You can either download the correct pre-built binary for your OS & CPU architecture, or build it yourself :
+
+- ```git clone https://github.com/Hash-AK/VoidEcho```
+- ```cd VoidEcho```
+- ```go run .```
