@@ -104,7 +104,7 @@ func main() {
 ## ##               #                 #        (N2)  #
 ##@##    (N1)                         # (3)          #
 ## #########        #                 ##### ###################
-##         #        #                 D              #        #
+##         #        #                                #        #
 ########## #        #                 #####         (D)   (T3)#
 #      ### ##########   (T1)          # (T2)         #        #
 #  (1)     #        #######           #########################
@@ -117,18 +117,18 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	crashSite := Room{
 		Name:        "The Crash Site",
-		Description: "You look around you : you're in the remmeneants of your space capsule. The takeoff from the base HCSW-3 turned dramatic : as your suit's sensors showed, there was an engine failure, which made your whole spaceship crash on the base. It crashed on some of the base's building, which cut the power in the base's main center. You're at a few meter of it. You mission is to get it, brign back power, then send an emergency call from the base's radio station.",
+		Description: "You look around you : you're in the remmeneants of your space capsule. You're still a bit shaked, but you need to get to the base, which is about 500 meters away to the east.",
 		Exits:       make(map[string]*Exit),
 	}
 	baseExterior := Room{
 		Name:        "The Base's Exterior",
-		Description: "AS you reach the base's airlock, you realize that because there is no power, you won't be able to get in. You will need an external source of power to make the airlock open. You recall there's a battery near the Solar Pannel Array..",
+		Description: "As you reach the base's airlock, you realize that because there is no power, you won't be able to get in. You will need an external source of power to make the airlock open. You recall there's a battery near the Solar Pannel Array, to the south..",
 		Exits:       make(map[string]*Exit),
 		Features:    make(map[string]string),
 	}
 	solarArray := Room{
 		Name:        "The Solar Array",
-		Description: "As you reach the Soalr Pannel Array, you find the. There's a locker with the battery in it. A quick glance on it's power level show that it's only at 5%... You will need to take it like that, anyways...",
+		Description: "As you reach the Solar Pannel Array, you find the. There's a locker with the battery in it. A quick glance on it's power level show that it's only at 5%... You will need to take it like that, anyways...",
 		Items:       make(map[string]*Item),
 		Exits:       make(map[string]*Exit),
 	}
@@ -166,11 +166,11 @@ func main() {
 	}
 	gridFeatures := make(map[string]GridFeature)
 	gridFeatures["4,7"] = GridFeature{Name: "lever", Description: "A power lever. Maybe actionning it could bring back power?"}
-	gridFeatures["25,6"] = GridFeature{Name: "terminal1", Description: "A Computer terminal. It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1'. It seems to require a password thought."}
-	gridFeatures["39,6"] = GridFeature{Name: "terminal2", Description: "A terminal necessary to open the door of the Radio Station. Require the keycard from the Equipement Room."}
-	gridFeatures["9,2"] = GridFeature{Name: "note1", Description: "A note (N1). It reads:\nThe password is 'VOID'."}
-	gridFeatures["61,10"] = GridFeature{Name: "keycard", Description: "A shiny access keycard"}
-	gridFeatures["43,5"] = GridFeature{Name: "radio", Description: "The long-range communication radio. Permit to contact the Earth."}
+	gridFeatures["25,6"] = GridFeature{Name: "terminal1", Description: "A Computer terminal (terminal1). It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1'. It seems to require a password thought."}
+	gridFeatures["39,6"] = GridFeature{Name: "terminal2", Description: "A terminal (terminal2) necessary to open the door of the Radio Station. Require the keycard from the Equipement Room."}
+	gridFeatures["9,2"] = GridFeature{Name: "note1", Description: "A note (note1). It reads:\nThe password is 'VOID'."}
+	gridFeatures["48,10"] = GridFeature{Name: "keycard", Description: "A shiny access keycard (keycard). It probably serves to unlock a terminal out there..."}
+	gridFeatures["61,5"] = GridFeature{Name: "radio", Description: "The long-range communication radio (radio). Permit to contact the Earth."}
 	baseExterior.Features["airlock"] = "The base's airlock."
 	var equipementRoomLocked = true
 	var radioRoomLocked = true
@@ -182,6 +182,7 @@ func main() {
 	typeWrite("[*] IMPACT IN :", 40, color.FgRed)
 	typeWrite("  3, 2, 1.....\n", 500, color.FgRed)
 	typeWrite("***************************", 40, color.FgRed)
+	typeWrite("\n\nYou regain consciousness. Your head is pounding, and you can barely remember what happened. You slowly remember the incident : the takeoff from the base HCSW-3 turned dramatic : as your suit's sensors showed, there was an engine failure, which made your whole spaceship go loose altitue and crash onto the base. The wreckage cut the power in the base's main center. You need to get to the base, bring back power, then send an emergency call from the radio station.", 40)
 	for {
 		fmt.Println("")
 		fmt.Print(">")
@@ -387,13 +388,13 @@ func main() {
 								break
 							}
 							if nextTile == 2 {
-								if nextX == 33 && nextY == 4 {
+								if nextX == 43 && nextY == 10 {
 									if equipementRoomLocked {
 										fmt.Println("[*] MOVEMENT HALTED. The Equipement Room door is locked.")
 										break
 									}
-								}
-								if nextX == 43 && nextY == 5 {
+
+								} else if nextX == 53 && nextY == 5 {
 									if radioRoomLocked {
 										fmt.Println("[*] MOVEMENT HALTED. The Radio Room Door is locked.")
 										break
@@ -450,7 +451,7 @@ func main() {
 					var foundFeature *GridFeature
 					var featureCoord string
 					for coord, f := range gridFeatures {
-						fmt.Printf("DEBUG: Checking feature with name: --%s--\n", f.Name)
+						//fmt.Printf("DEBUG: Checking feature with name: --%s--\n", f.Name)
 						if f.Name == itemToUse {
 							//fmt.Println("DEBUG: Name match SUCCESS!")
 							var featureX, featureY int
@@ -490,6 +491,40 @@ func main() {
 							originalFeature.Description = "The power lever is now in the 'ON' position."
 							gridFeatures[featureCoord] = originalFeature
 						}
+					case "note1":
+						fmt.Println(foundFeature.Description)
+					case "terminal1":
+						fmt.Println("The terminal screen flickers, asking for a password.")
+						fmt.Print("ENTER PASSWORD > ")
+						input, _ := reader.ReadString('\n')
+						if strings.TrimSpace(input) == "VOID" {
+							fmt.Println("ACCESS GRANTED. The door to the Equipement Room slides open.")
+							equipementRoomLocked = false
+							game.World[10][43] = 0
+						} else {
+							fmt.Println("ACCESS DENIED.")
+						}
+					case "keycard":
+						fmt.Println("You pick up the keycard and clip it to your suit.")
+						game.Player.Inventory["keycard"] = &Item{Name: "keycard", Description: "A standart access keycard."}
+						delete(gridFeatures, featureCoord)
+					case "terminal2":
+						if _, hasKeycard := game.Player.Inventory["keycard"]; hasKeycard {
+							fmt.Println("You insert the keycard in the terminal's slot. A green message appear on it : ACCESS GRANTED.")
+							fmt.Println("The door to the Radio Room is now unlocked.")
+							radioRoomLocked = false
+							game.World[5][53] = 0
+						} else {
+							fmt.Println("ACCESS DENIED. Keycard required.")
+						}
+					case "radio":
+						if radioRoomLocked {
+							fmt.Println("You cannot raech the radio, the door is locked. Use terminal2 to unlock it first.")
+
+						} else {
+							typeWrite("You power on the radio and tune it to the emergency long-range frequency... After a long silence, a voice crackles back : '...copy that, HCSW-3. We read you. Help is on the way. Hold tight. Over.'\n\n*** YOU WIN! ***", 50, color.FgBlue)
+							os.Exit(0)
+						}
 					default:
 						fmt.Println("[*] SYSTEM ERROR: you can't use the '", foundFeature.Name, "'in that way.")
 
@@ -506,6 +541,12 @@ func main() {
 					fmt.Println("\n--- STATION BLUEPRINTS ---")
 					for y, row := range game.World {
 						for x, tile := range row {
+							if game.Player.X == x && game.Player.Y == y {
+								color.Set(color.FgGreen)
+								fmt.Print("@")
+								color.Unset()
+								continue
+							}
 							currentPosKey := fmt.Sprintf("%d,%d", x, y)
 							if feature, ok := gridFeatures[currentPosKey]; ok {
 								color.Set(color.FgYellow)
@@ -513,29 +554,26 @@ func main() {
 								color.Unset()
 								continue
 							}
-							if game.Player.X == x && game.Player.Y == y {
-								color.Set(color.FgGreen)
-								fmt.Print("@")
-								color.Unset()
 
-							} else {
-								switch tile {
-								case 1:
-									fmt.Print("#")
-								case 2:
-									fmt.Print("D")
-								default:
-									fmt.Print(".")
-								}
+							switch tile {
+							case 1:
+								fmt.Print("#")
+							case 2:
+								color.Set(color.FgBlue)
+								fmt.Print("D")
+								color.Unset()
+							default:
+								fmt.Print(".")
+
 							}
 						}
 						fmt.Println("")
 
 					}
 
+					fmt.Println("-------------------")
+					fmt.Println("D = door, # = wall, @ = player position. T = terminal, N = note, L = lever, R = radio, K = keytag")
 				}
-				fmt.Println("-------------------")
-				fmt.Println("D = door, # = wall, @ = player position. T = terminal, N = note, L = lever, R = radio, K = keytag")
 			case "help":
 				fmt.Println("")
 				fmt.Println("help - display this help menu")
