@@ -117,18 +117,18 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	crashSite := Room{
 		Name:        "The Crash Site",
-		Description: "You look around you : you're in the remmeneants of your space capsule. You're still a bit shaked, but you need to get to the base, which is about 500 meters away to the east.",
+		Description: "You look around you : Wreckage and twisted metal surround you. You head pounds. Throught a shattered viewport, you can see the silent, dark for of the HCSW-3 base about 500 meters to the east.",
 		Exits:       make(map[string]*Exit),
 	}
 	baseExterior := Room{
 		Name:        "The Base's Exterior",
-		Description: "As you reach the base's airlock, you realize that because there is no power, you won't be able to get in. You will need an external source of power to make the airlock open. You recall there's a battery near the Solar Pannel Array, to the south..",
+		Description: "As you reach the base's exterior, you realize the massive airlock door stands silent and dark. A control panel next to it is lifeless, it's screen cracked. There's no hum indicating power. It's sealed tight. To the south, a service path leads towards the faint glint of the station's solar array",
 		Exits:       make(map[string]*Exit),
 		Features:    make(map[string]string),
 	}
 	solarArray := Room{
 		Name:        "The Solar Array",
-		Description: "As you reach the Solar Pannel Array, you find the. There's a locker with the battery in it. A quick glance on it's power level show that it's only at 5%... You will need to take it like that, anyways...",
+		Description: "As you reach the Solar Panel Array, you find the. There's a locker with the battery in it. A quick glance on it's power level show that it's only at 5%... You will need to take it like that, anyways...",
 		Items:       make(map[string]*Item),
 		Exits:       make(map[string]*Exit),
 	}
@@ -137,19 +137,19 @@ func main() {
 		Description: "A battery. Can serve to power electrical devices for a short amount of time.",
 	}
 	crashSite.Exits["east"] = &Exit{
-		Description: " ",
+		Description: "With some difficulty, you make your way to the east, walking between the crushed metal and debris toward the base.",
 		Destination: &baseExterior,
 	}
 	baseExterior.Exits["south"] = &Exit{
-		Description: " ",
+		Description: "You head south on the service path toward the solar array.",
 		Destination: &solarArray,
 	}
 	baseExterior.Exits["west"] = &Exit{
-		Description: " ",
+		Description: "You make your way back to the crash site, navigating the twisted wreckage.",
 		Destination: &crashSite,
 	}
 	solarArray.Exits["north"] = &Exit{
-		Description: " ",
+		Description: "Engaging yourself on the service path, you head back north toward the pwoered-down base and it's silent airlock.",
 		Destination: &baseExterior,
 	}
 	player := Player{
@@ -166,7 +166,7 @@ func main() {
 	}
 	gridFeatures := make(map[string]GridFeature)
 	gridFeatures["4,7"] = GridFeature{Name: "lever", Description: "A power lever. Maybe actionning it could bring back power?"}
-	gridFeatures["25,6"] = GridFeature{Name: "terminal1", Description: "A Computer terminal (terminal1). It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1'. It seems to require a password thought."}
+	gridFeatures["25,6"] = GridFeature{Name: "terminal1", Description: "A a dusty, flickering terminal screen. It hums with low power. (terminal1). It's sole purpose is to unlock the door of the Equipement Room (10,43). You can intereact with it with 'use terminal1'. It seems to require a password thought."}
 	gridFeatures["39,6"] = GridFeature{Name: "terminal2", Description: "A terminal (terminal2) necessary to open the door of the Radio Station. Require the keycard from the Equipement Room."}
 	gridFeatures["9,2"] = GridFeature{Name: "note1", Description: "A note (note1). It reads:\nThe password is 'VOID'."}
 	gridFeatures["48,10"] = GridFeature{Name: "keycard", Description: "A shiny access keycard (keycard). It probably serves to unlock a terminal out there..."}
@@ -401,6 +401,7 @@ func main() {
 									}
 								} else {
 									fmt.Println("[*] MOVEMENT HALTED. Door is sealed.")
+									break
 								}
 
 							}
@@ -474,7 +475,7 @@ func main() {
 						}
 					}
 					if foundFeature == nil {
-						fmt.Println("DEBUG: 'foundfeature' is nil after search.")
+						//fmt.Println("DEBUG: 'foundfeature' is nil after search.")
 						fmt.Println("[*] SYSTEM ERROR: Cannot use '", itemToUse, "'. It is not in the immediate vicinity.")
 						break
 
@@ -482,10 +483,10 @@ func main() {
 					switch foundFeature.Name {
 					case "lever":
 						if game.PowerOn {
-							fmt.Println("[*] SYSTEM REPORT : Main pwoer already online.")
+							fmt.Println("[*] SYSTEM REPORT : Main power already online.")
 
 						} else {
-							fmt.Println("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything. You can now use the command 'map' to see the full map of the base.")
+							typeWrite("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything. You can now use the command 'map' to see the full map of the base.", 40, color.FgGreen)
 							game.PowerOn = true
 							originalFeature := gridFeatures[featureCoord]
 							originalFeature.Description = "The power lever is now in the 'ON' position."
