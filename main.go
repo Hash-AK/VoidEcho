@@ -128,7 +128,7 @@ func main() {
 	}
 	solarArray := Room{
 		Name:        "The Solar Array",
-		Description: "As you reach the Solar Panel Array, you find the. There's a locker with the battery in it. A quick glance on it's power level show that it's only at 5%... You will need to take it like that, anyways...",
+		Description: "The area is dominated by massive, dusty solar panels, msot of them cracked down and inert. Some part of your spaceship fell on them, renderign them unusable. Half-hidden behind a damaged support strut, you spot a heavy-duty battery, it's emergency light blinking a faint, desperate red.",
 		Items:       make(map[string]*Item),
 		Exits:       make(map[string]*Exit),
 	}
@@ -197,7 +197,9 @@ func main() {
 		if len(fieldsCommand) > 2 {
 			arg2 = fieldsCommand[2]
 		}
+		fmt.Println()
 		fmt.Printf("You entered the command : %s\n", cleanInput)
+		fmt.Println()
 		switch game.GameMode {
 		case ModeRoom:
 			//stuff for when outside
@@ -486,7 +488,7 @@ func main() {
 							fmt.Println("[*] SYSTEM REPORT : Main power already online.")
 
 						} else {
-							typeWrite("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now say correctly everything. You can now use the command 'map' to see the full map of the base.", 40, color.FgGreen)
+							typeWrite("You pull the heavy lever. As you reach it's 'On' position, a deep hum resonates trhought the station! All the lights are backup : you can now see correctly everything. You can now use the command 'map' to see the full map of the base.", 40, color.FgGreen)
 							game.PowerOn = true
 							originalFeature := gridFeatures[featureCoord]
 							originalFeature.Description = "The power lever is now in the 'ON' position."
