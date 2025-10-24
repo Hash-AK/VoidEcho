@@ -189,6 +189,9 @@ func main() {
 		input, _ := reader.ReadString('\n')
 		cleanInput := strings.TrimSpace(input)
 		fieldsCommand := strings.Fields(cleanInput)
+		if len(fieldsCommand) == 0 {
+			continue
+		}
 		var arg1, arg2 string
 		command := fieldsCommand[0]
 		if len(fieldsCommand) > 1 {
